@@ -1,29 +1,47 @@
-from flask import Flask, jsonify
+from flask import Flask, render_template
+from flask_restx import Api
+
+from project.views.auth.auth import auth_ns
+from project.views.directors import directors_ns
+from project.views.genres import genres_ns
+from project.views.movies import movie_ns
+from project.config import BaseConfig
+from project.setup_db import db
+from project.views.user import user_ns
 from flask_cors import CORS
 
-from project.exceptions import BaseServiceError
-from project.setup.api import api
-from project.setup.db import db
-from project.views import auth_ns, genres_ns, user_ns
+api = Api(title="Flask Course Project 3", doc="/docs")
 
 
-def base_service_error_handler(exception: BaseServiceError):
-    return jsonify({'error': str(exception)}), exception.code
+def create_app(config_object):
+    application = Flask(__name__,
+                        template_folder="C:/Users/kiril/PycharmProjects/coursework_3_source/templates",
+                        static_folder="C:/Users/kiril/PycharmProjects/coursework_3_source/static"
+                        )
+    application.config.from_object(config_object)
+
+    @application.route('/')
+    def index():
+        return render_template('index.html')
+
+    register_extensions(application)
+
+    CORS(app=application)
+
+    return application
 
 
-def create_app(config_obj):
-    app = Flask(__name__)
-    app.config.from_object(config_obj)
-
-    CORS(app=app)
-    db.init_app(app)
-    api.init_app(app)
-
-    # Регистрация эндпоинтов
+def register_extensions(application):
+    db.init_app(application)
+    api.init_app(application)
+    api.add_namespace(movie_ns)
+    api.add_namespace(genres_ns)
+    api.add_namespace(directors_ns)
     api.add_namespace(auth_ns)
     api.add_namespace(user_ns)
-    api.add_namespace(genres_ns)
 
-    app.register_error_handler(BaseServiceError, base_service_error_handler)
 
-    return app
+if __name__ == '__main__':
+    app_config = BaseConfig()
+    app = create_app(app_config)
+    app.run(port=25000)

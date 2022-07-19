@@ -1,29 +1,34 @@
-from contextlib import suppress
-from typing import Any, Dict, List, Type
-
 from sqlalchemy.exc import IntegrityError
 
-from project.config import config
-from project.models import Genre
+from project.config import DevelopmentConfig
+from project.dao.models.genres import Genre
+from project.dao.models.directors import Director
+from project.dao.models.movies import Movie
+
 from project.server import create_app
-from project.setup.db import db, models
+from project.setup_db import db
 from project.utils import read_json
 
+app = create_app(DevelopmentConfig)
 
-def load_data(data: List[Dict[str, Any]], model: Type[models.Base]) -> None:
-    for item in data:
-        item['id'] = item.pop('pk')
-        db.session.add(model(**item))
+data = read_json("fixtures.json")
 
+with app.app_context():
+    for genre in data["genres"]:
+        db.session.add(Genre(id=genre["pk"], name=genre["name"]))
+    for directors in data["directors"]:
+        db.session.add(Director(id=directors["pk"], name=directors["name"]))
+    for movies in data["movies"]:
+        db.session.add(Movie(id=movies["pk"],
+                             title=movies['title'],
+                             description=movies["description"],
+                             trailer=movies['trailer'],
+                             year=movies['year'],
+                             rating=movies["rating"],
+                             genre_id=movies['genre_id'],
+                             director_id=movies['director_id']))
 
-if __name__ == '__main__':
-    fixtures: Dict[str, List[Dict[str, Any]]] = read_json("fixtures.json")
-
-    app = create_app(config)
-
-    with app.app_context():
-        # TODO: [fixtures] Добавить модели Directors и Movies
-        load_data(fixtures['genres'], Genre)
-
-        with suppress(IntegrityError):
-            db.session.commit()
+    try:
+        db.session.commit()
+    except IntegrityError:
+        print("Fixtures already loaded")
