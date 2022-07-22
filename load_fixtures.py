@@ -5,7 +5,7 @@ from project.dao.models.genres import Genre
 from project.dao.models.directors import Director
 from project.dao.models.movies import Movie
 
-from project.server import create_app
+from server import create_app
 from project.setup_db import db
 from project.utils import read_json
 

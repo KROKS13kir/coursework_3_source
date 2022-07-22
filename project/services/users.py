@@ -46,22 +46,31 @@ class UserService:
             )
         )
 
-    def update(self, data, uid):
+    def update(self, data):
+        uid = data.get('id')
         user = self.get_one(uid)
-        if self.compare_passwords(user.password, data["old_password"]):
-            new_password = self.generate_user_password(data["new_password"])
-            return self.user_dao.update(data, new_password, uid)
-        else:
-            raise Exception
 
-    def update_part(self, data, uid):
-        user = self.user_dao.get_one(uid)
-
-        if 'name' in data:
-            user.name = data['name']
-        if "surname" in data:
-            user.surname = data["surname"]
-        if "favorite_genre" in data:
-            user.favorite_genre = data["favorite_genre"]
-
+        user.email = data.get('email')
+        user.password = self.get_hash(data.get('password'))
+        user.name = data.get('name')
+        user.surname = data.get('surname')
+        user.favorite_genre = data.get('favorite_genre')
         self.user_dao.update(user)
+
+    def update_partial(self, data):
+        uid = data.get('id')
+
+        user = self.get_one(uid)
+
+        if 'email' in data:
+            user.email = data.get('email')
+        if 'name' in data:
+            user.name = data.get('name')
+        if 'surname' in data:
+            user.surname = data.get('surname')
+        if 'password' in data:
+            user.password = self.get_hash(data.get('password'))
+        if 'favorite_genre' in data:
+            user.favorite_genre = data.get('favorite_genre')
+
+        return self.user_dao.update(user)
