@@ -2,8 +2,11 @@ import base64
 import hashlib
 import hmac
 
+import jwt as jwt
+
 from constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS
 from project.dao.users import UserDAO
+from constants import SECRET_KEY, ALGORITM
 
 
 class UserService:
@@ -74,3 +77,6 @@ class UserService:
             user.favorite_genre = data.get('favorite_genre')
 
         return self.user_dao.update(user)
+
+    def check_token(self, token):
+        return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITM])

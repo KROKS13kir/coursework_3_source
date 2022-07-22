@@ -17,7 +17,7 @@ class UserView(Resource):
         email = user_service.check_token(token)['email']
         user = user_service.get_filter_by_email(email)
         if user:
-            return UsersSchema.dump(user), 200
+            return UsersSchema().dump(user), 200
         return {'message': 'Object not found'}, 400
 
     @auth_required
