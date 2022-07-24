@@ -15,7 +15,7 @@ class UserView(Resource):
         data = request.headers['Authorization']
         token = data.split("Bearer ")[-1]
         email = user_service.check_token(token)['email']
-        user = user_service.get_filter_by_email(email)
+        user = user_service.get_user_by_email(email)
         if user:
             return UsersSchema().dump(user), 200
         return {'message': 'Object not found'}, 400
@@ -26,7 +26,7 @@ class UserView(Resource):
         data = request.headers['Authorization']
         token = data.split("Bearer ")[-1]
         email = user_service.check_token(token)['email']
-        user = user_service.get_filter_by_email(email)
+        user = user_service.get_user_by_email(email)
         uid = user.id
         req_json['id'] = uid
         user = user_service.update_partial(req_json)
@@ -45,7 +45,7 @@ class UserView(Resource):
         data = request.headers['Authorization']
         token = data.split("Bearer ")[-1]
         email = user_service.check_token(token)['email']
-        user = user_service.get_filter_by_email(email)
+        user = user_service.get_user_by_email(email)
         uid = user.id
 
         data = {'id': uid, 'password': new_password}

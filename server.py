@@ -14,10 +14,7 @@ api = Api(title="Flask Course Project 3", doc="/docs")
 
 
 def create_app(config_object):
-    application = Flask(__name__,
-                        template_folder="C:/Users/kiril/PycharmProjects/coursework_3_source/templates",
-                        static_folder="C:/Users/kiril/PycharmProjects/coursework_3_source/static"
-                        )
+    application = Flask(__name__)
     application.config.from_object(config_object)
 
     @application.route('/')
