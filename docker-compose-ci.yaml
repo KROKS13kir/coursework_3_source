@@ -2,6 +2,6 @@ version: "3.9"
 
 services:
   api:
-    image: kroks/flask-app:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: kroks/flask-app:$GITHUB_REF_NAME-$GITHUBRUN_ID
     ports:
     - 25000:25000
