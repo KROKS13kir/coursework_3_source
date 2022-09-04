@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+    image: kroks/flask-app
+    ports:
+      - 25000:25000

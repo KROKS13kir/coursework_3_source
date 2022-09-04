@@ -2,7 +2,7 @@ import hashlib
 import jwt
 from flask import request
 from flask_restx import abort
-from constants import SECRET_KEY, ALGORITM
+from my_constants import SECRET_KEY, ALGORITM
 from flask import current_app
 
 

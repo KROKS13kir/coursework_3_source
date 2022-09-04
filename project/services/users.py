@@ -4,9 +4,9 @@ import hmac
 
 import jwt as jwt
 
-from constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS
+from my_constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS
 from project.dao.users import UserDAO
-from constants import SECRET_KEY, ALGORITM
+from my_constants import SECRET_KEY, ALGORITM
 
 
 class UserService:

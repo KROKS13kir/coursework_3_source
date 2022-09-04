@@ -13,9 +13,9 @@ from flask_cors import CORS
 api = Api(title="Flask Course Project 3", doc="/docs")
 
 
-def create_app(config_object):
+def create_app(*args):
     application = Flask(__name__)
-    application.config.from_object(config_object)
+    application.config.from_object(args)
 
     @application.route('/')
     def index():

@@ -2,7 +2,7 @@ import jwt
 import datetime
 import calendar
 
-from constants import SECRET_KEY, ALGORITM
+from my_constants import SECRET_KEY, ALGORITM
 
 
 class AuthService:
